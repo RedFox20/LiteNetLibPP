@@ -39,8 +39,13 @@ lnl::net_manager::~net_manager() {
         m_logic_thread.join();
     }
 
+#if _MSC_VER
+    shutdown(m_socket, /*SHUT_RDWR*/2);
+    closesocket(m_socket);
+#else
     shutdown(m_socket, SHUT_RDWR);
     close(m_socket);
+#endif
 
     m_socket = INVALID_SOCKET;
 
